@@ -1,1 +1,8 @@
 # iptables
+
+
+## Open port 80
+
+```bash
+iptables -I INPUT 5 -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+```
