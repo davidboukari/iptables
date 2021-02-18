@@ -5,7 +5,7 @@ ____________________________________________________________________________
 ## Restricting host traffic
 ### Firewall DIAG
 ### Connexion to the host sshd, httpd
-| INPUT                                              |       HOST       |       OUTPUT |
+|| INPUT                                              |       HOST       |       OUTPUT ||
 | -------------------                                | ------           | --- |
 | proto=tcp, dport=22, state=NEW,RELATED,ESTABLISHED |  -> Listen 22 -> |       proto=tcp, sport=22, state=RELATED,ESTABLISHED |
 | proto=tcp, dport=80, state=NEW,RELATED,ESTABLISHED |  -> Listen 80 -> |       proto=tcp, sport=80, state=RELATED,ESTABLISHED |
