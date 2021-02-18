@@ -89,8 +89,10 @@ ____________________________________________________________________________
 |0      |0      |Echo Reply     |x              |RFC792    |
 |8      |0      |Echo request   |x              |RFC792    |
 
+```
 CLIENT
      ICMP echo Reply (8)  ---> NEW, RELATED, ESTABLISHED ------> ICMP echo Request (0)
+```
 
 ### States
 * -m state --state NEW,RELATED,ESTABLISHED
