@@ -1,6 +1,25 @@
 # iptables
 
+# Add Or Insert rules
+-I: Insert at the begining (default number is 1)
+-A: Append the rule at the end
 
+____________________________________________________________________________
+## Modules
+* https://ipset.netfilter.org/iptables-extensions.man.html
+### Conntrack 
+apt-get install conntrack
+
+## States
+-m state --state NEW,RELATED,ESTABLISHED
+-m conntrack --ctstate NEW,RELATED,ESTABLISHED
+ 
+____________________________________________________________________________
+## Backup & Restore rules
+```
+iptables-save > /etc/iptables/rules.v9
+iptables-restore < /etc/iptables/rules.v9
+```
 ____________________________________________________________________________
 ## Restricting host traffic
 ### Firewall DIAG
@@ -9,6 +28,7 @@ ____________________________________________________________________________
 | -------------------                                | ------           | --- |
 | proto=tcp, dport=22, state=NEW,RELATED,ESTABLISHED |  -> Listen 22 -> |       proto=tcp, sport=22, state=RELATED,ESTABLISHED |
 | proto=tcp, dport=80, state=NEW,RELATED,ESTABLISHED |  -> Listen 80 -> |       proto=tcp, sport=80, state=RELATED,ESTABLISHED |
+| proto=tcp, dport=8080, state=NEW,RELATED,ESTABLISHED |  -> Listen 8080 -> |       proto=tcp, sport=8080, state=RELATED,ESTABLISHED |
 
 ### HOST out connexion tcp 80,443 - udp 53, icmp
 | INPUT                                                 |    HOST       |       OUTPUT |
@@ -25,7 +45,10 @@ iptables -F
 ### connexion to the host service sshd,httpd
 iptables -t filter -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
 iptables -t filter -A INPUT -p tcp --dport 80 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
+iptables -t filter -A INPUT -p tcp --dport 8080 -m state --state NEW,RELATED,ESTABLISHED -j ACCEPT
 iptables -t filter -A OUTPUT -p tcp  -m multiport --sports 22,80 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -t filter -A OUTPUT -p tcp --sport 8080 -m state --state RELATED,ESTABLISHED -j ACCEPT
+
 
 ### Authorized host out request tcp 80,443 - udp 53 -  icmp
 iptables -t filter -A INPUT -p tcp -m multiport --sports 80,443 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
