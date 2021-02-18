@@ -1,16 +1,23 @@
 # iptables
 
-# Add Or Insert rules
+____________________________________________________________________________
+## Add Or Insert rules
 * -I: Insert at the begining (default number is 1)
 * -A: Append the rule at the end
 
 ____________________________________________________________________________
+## Remove a rule at line
+* iptables -nvL --line-numbers
+* iptables -D INPUT 1
+* iptables -D OUTPUT 1
+____________________________________________________________________________
 ## Modules
 * https://ipset.netfilter.org/iptables-extensions.man.html
+
 ### Conntrack 
 apt-get install conntrack
 
-## States
+### States
 -m state --state NEW,RELATED,ESTABLISHED
 -m conntrack --ctstate NEW,RELATED,ESTABLISHED
  
