@@ -18,8 +18,8 @@ ____________________________________________________________________________
 apt-get install conntrack
 
 ### States
--m state --state NEW,RELATED,ESTABLISHED
--m conntrack --ctstate NEW,RELATED,ESTABLISHED
+* -m state --state NEW,RELATED,ESTABLISHED
+* -m conntrack --ctstate NEW,RELATED,ESTABLISHED
  
 ____________________________________________________________________________
 ## Backup & Restore rules
