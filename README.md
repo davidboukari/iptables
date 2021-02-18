@@ -15,7 +15,12 @@ ____________________________________________________________________________
 * https://ipset.netfilter.org/iptables-extensions.man.html
 
 ### Conntrack 
-apt-get install conntrack
+* apt-get install conntrack
+
+* apt-get install conntrackd
+```
+tail -f /var/log/conntrackd-stats.log
+
 
 ### States
 * -m state --state NEW,RELATED,ESTABLISHED
