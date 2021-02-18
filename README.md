@@ -1,8 +1,8 @@
 # iptables
 
 # Add Or Insert rules
--I: Insert at the begining (default number is 1)
--A: Append the rule at the end
+* -I: Insert at the begining (default number is 1)
+* -A: Append the rule at the end
 
 ____________________________________________________________________________
 ## Modules
