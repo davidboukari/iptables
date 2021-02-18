@@ -11,7 +11,7 @@ ____________________________________________________________________________
 | proto=tcp, dport=80, state=NEW,RELATED,ESTABLISHED |  -> Listen 80 -> |       proto=tcp, sport=80, state=RELATED,ESTABLISHED |
 
 ### HOST out connexion tcp 80,443 - udp 53, icmp
-| INPUT                                                |               |       OUTPUT |
+| INPUT                                                 |    HOST           |       OUTPUT |
 | ---                                                   | ----          | ---         | 
 | proto=tcp, --sports=80,443, state=RELATED,ESTABLISHED |               |       proto=tcp, --dports=80,443, state=NEW,RELATED,ESTABLISHED |
 | proto=udp, --sport=53, state=RELATED,ESTABLISHED      |               |       proto=udp, --dport=53, state=NEW,RELATED,ESTABLISHED |
