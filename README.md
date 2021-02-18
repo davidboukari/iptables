@@ -84,12 +84,14 @@ ____________________________________________________________________________
 PREROUTING dport 2222 -> DNAT -> dport=22
 ```
 iptables -t nat -A PREROUTING -p tcp --dport 2222 -j DNAT ip:22
+iptables -t nat PREROUTING -p tcp -m tcp --dport 2222 -j DNAT --to-destination 192.168.0.54:22
 ```
 
 ____________________________________________________________________________
 ### INPUT SNAT
 ```
 iptables -t nat -A INPUT -p tcp -s IP --dport 22 -j SNAT --to-source IP
+iptables -t nat -A INPUT -s 192.168.0.118/32 -p tcp -j SNAT --to-source 192.168.0.120
 ```
 
 
