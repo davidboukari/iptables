@@ -1,5 +1,39 @@
 # iptables
 
+
+## Configure network
+### static old method
+```
+cat /etc/network/interfaces
+auto eth0
+iface eth0 inet static
+  address 192.168.0.54
+  netmask 255.255.255.0
+  gateway  192.168.0.254
+  dns-nameserver 8.8.8.8
+
+auto eth0:1
+iface eth0:1 inet static
+  address 192.168.0.56
+  netmask 255.255.255.0
+```
+
+### with netplan
+```
+cat  /etc/netplan/00-installer-config.yaml
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    ens3:
+      dhcp4: no
+      addresses:
+        - 192.168.0.54/24
+      gateway4: 192.168.0.254
+      nameservers:
+        addresses: [8.8.8.8, 1.1.1.1, 127.0.0.53]
+  version: 2
+```
+
 ____________________________________________________________________________
 ## Add Or Insert rules
 * -I: Insert at the begining (default number is 1)
