@@ -80,6 +80,17 @@ CLIENT                      HOST
        ======== CLOSE ====>
        <======= CLOSE =====
 ```
+____________________________________________________________________________
+## ICMP
+* https://www.linuxtopia.org/Linux_Firewall_iptables/a6283.html
+
+|TYPE   |CODE   |Description    |Query  Error   |Reference |
+| ---   | ---   | ---            | ---r         | --- |
+|0      |0      |Echo Reply     |x              |RFC792    |
+|8      |0      |Echo request   |x              |RFC792    |
+
+CLIENT
+     ICMP echo Reply (8)  ---> NEW, RELATED, ESTABLISHED ------> ICMP echo Request (0)
 
 ### States
 * -m state --state NEW,RELATED,ESTABLISHED
