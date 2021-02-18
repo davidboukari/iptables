@@ -5,13 +5,14 @@ ____________________________________________________________________________
 ## Restricting host traffic
 ### Firewall DIAG
 ### Connexion to the host sshd, httpd
-|| INPUT                                              |       HOST       |       OUTPUT ||
+| INPUT                                              |       HOST       |       OUTPUT |
 | -------------------                                | ------           | --- |
 | proto=tcp, dport=22, state=NEW,RELATED,ESTABLISHED |  -> Listen 22 -> |       proto=tcp, sport=22, state=RELATED,ESTABLISHED |
 | proto=tcp, dport=80, state=NEW,RELATED,ESTABLISHED |  -> Listen 80 -> |       proto=tcp, sport=80, state=RELATED,ESTABLISHED |
 
 ### HOST out connexion tcp 80,443 - udp 53, icmp
-|| INPUT                                                |               |       OUTPUT ||
+| INPUT                                                |               |       OUTPUT |
+| ---                                                   | ----          | ---         | 
 | proto=tcp, --sports=80,443, state=RELATED,ESTABLISHED |               |       proto=tcp, --dports=80,443, state=NEW,RELATED,ESTABLISHED |
 | proto=udp, --sport=53, state=RELATED,ESTABLISHED      |               |       proto=udp, --dport=53, state=NEW,RELATED,ESTABLISHED |
 | proto=icmp, state=RELATED,ESTABLISHED                 |               |       proto=icmp, state=NEW,RELATED,ESTABLISHED |
