@@ -69,7 +69,23 @@ iptables -t filter -A OUTPUT -p icmp -m conntrack --ctstate NEW,RELATED,ESTABLIS
 iptables -t filter -A OUTPUT -j DROP
 ```
 
+____________________________________________________________________________
+# table nat
+| PREROUTING | INPUT   |  OUTPUT |  POSTROUTING  |
+| ---        | ---     | ---     |  ---          |
+| DNAT cannot update source | SNAT local proc dest=127.0.0.1 cannot update dest | DNAT local proc source=127.0.0.1 cannot update source | SNAT cannot update DEST |
 
+## PREROUTING DNAT
+PREROUTING dport 2222 -> DNAT -> dport=22
+```
+iptables -t nat -A PREROUTING -p tcp --dport 2222 -j DNAT ip:22
+```
+
+____________________________________________________________________________
+### INPUT SNAT
+```
+iptables -t nat -A INPUT -p tcp -s IP --dport 22 -j SNAT --to-source IP
+```
 
 
 
