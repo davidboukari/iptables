@@ -51,11 +51,28 @@ ____________________________________________________________________________
 ### Conntrack 
 * apt-get install conntrack
 
-
 * conntrackd https://conntrack-tools.netfilter.org/manual.html 
 ```bash
 apt-get install conntrackd
 tail -f /var/log/conntrackd-stats.log
+```
+
+```
+CLIENT                      HOST
+       -----------------------------------------
+       ======= SYN  ======>                    -
+                                               -
+       -----------------------                 -  STATE NEW
+       <===== SYN / ACK ===  -                 -
+                             - STATE RELATED   -
+       ======= ACK  ======>  -                 -
+                                               -
+       -----------------------------------------
+
+       <==================>      STATE ESTABLISHED
+
+       ======== CLOSE ====>
+       <======= CLOSE =====
 ```
 
 ### States
