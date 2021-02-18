@@ -119,7 +119,7 @@ ____________________________________________________________________________
 | ---        | ---     | ---     |  ---          |
 | DNAT cannot update source | SNAT local proc dest=127.0.0.1 cannot update dest | DNAT local proc source=127.0.0.1 cannot update source | SNAT cannot update DEST |
 
-## PREROUTING DNAT
+### PREROUTING DNAT
 PREROUTING dport 2222 -> DNAT -> dport=22
 ```
 iptables -t nat -A PREROUTING -p tcp --dport 2222 -j DNAT ip:22
@@ -138,9 +138,11 @@ ____________________________________________________________________________
 iptables -t nat -I OUTPUT -p tcp --dport 2222 -j DNAT --to :22
 iptables -t nat -I OUTPUT -p tcp -d 192.168.0.222 --dport 2223 -j DNAT --to 192.168.0.135:22
 ```
-
-
-
+____________________________________________________________________________
+### POSTROUTING SNAT
+```
+iptables -t nat -I POSTROUTING -p tcp --dport 22 -j SNAT --to 192.168.0.56
+```
 
 
 
