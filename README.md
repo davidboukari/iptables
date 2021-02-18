@@ -92,7 +92,7 @@ iptables-save > /etc/iptables/rules.v9
 iptables-restore < /etc/iptables/rules.v9
 ```
 ____________________________________________________________________________
-## Restricting host traffic
+## Table filter - Restricting host traffic
 ### Firewall DIAG
 ### Connexion to the host sshd, httpd
 | INPUT                                                |       HOST       |       OUTPUT |
@@ -137,7 +137,7 @@ iptables -t filter -A OUTPUT -j DROP
 ```
 
 ____________________________________________________________________________
-# table nat
+# Table nat
 | PREROUTING | INPUT   |  OUTPUT |  POSTROUTING  |
 | ---        | ---     | ---     |  ---          |
 | DNAT cannot update source | SNAT local proc dest=127.0.0.1 cannot update dest | DNAT local proc source=127.0.0.1 cannot update source | SNAT cannot update DEST |
