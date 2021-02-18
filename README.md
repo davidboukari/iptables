@@ -96,8 +96,12 @@ ____________________________________________________________________________
 iptables -t nat -A INPUT -p tcp -s IP --dport 22 -j SNAT --to-source IP
 iptables -t nat -A INPUT -s 192.168.0.118/32 -p tcp -j SNAT --to-source 192.168.0.120
 ```
-
-
+____________________________________________________________________________
+### OUTPUT DNAT
+```
+iptables -t nat -I OUTPUT -p tcp --dport 2222 -j DNAT --to :22
+iptables -t nat -I OUTPUT -p tcp -d 192.168.0.222 --dport 2223 -j DNAT --to 192.168.0.222:22
+```
 
 
 
