@@ -17,8 +17,10 @@ ____________________________________________________________________________
 ### Conntrack 
 * apt-get install conntrack
 
-* apt-get install conntrackd
+
+* conntrackd https://conntrack-tools.netfilter.org/manual.html 
 ```bash
+apt-get install conntrackd
 tail -f /var/log/conntrackd-stats.log
 ```
 
