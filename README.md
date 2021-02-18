@@ -85,7 +85,7 @@ ____________________________________________________________________________
 * https://www.linuxtopia.org/Linux_Firewall_iptables/a6283.html
 
 |TYPE   |CODE   |Description    |Query  Error   |Reference |
-| ---   | ---   | ---            | ---r         | --- |
+| ---   | ---   | ---           |  ---          | ---      |
 |0      |0      |Echo Reply     |x              |RFC792    |
 |8      |0      |Echo request   |x              |RFC792    |
 
