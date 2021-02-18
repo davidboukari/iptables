@@ -18,9 +18,9 @@ ____________________________________________________________________________
 * apt-get install conntrack
 
 * apt-get install conntrackd
-```
+```bash
 tail -f /var/log/conntrackd-stats.log
-
+```
 
 ### States
 * -m state --state NEW,RELATED,ESTABLISHED
@@ -28,7 +28,7 @@ tail -f /var/log/conntrackd-stats.log
  
 ____________________________________________________________________________
 ## Backup & Restore rules
-```
+```bash
 iptables-save > /etc/iptables/rules.v9
 iptables-restore < /etc/iptables/rules.v9
 ```
