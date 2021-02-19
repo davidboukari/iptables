@@ -180,7 +180,7 @@ ____________________________________________________________________________
 iptables -t nat -I POSTROUTING -p tcp --dport 22 -j SNAT --to 192.168.0.56
 ```
 ____________________________________________________________________________
-# Table raw - PREROUTING & OUTPUT - reduce the connexion tracking size
+### Table raw - PREROUTING & OUTPUT - reduce the connexion tracking size
 ```
 iptables -t filter -I INPUT -p icmp --icmp-type 8  -j ACCEPT
 iptables -t filter -I OUTPUT -p icmp --icmp-type 0 -j ACCEPT
@@ -189,7 +189,7 @@ iptables -t raw -I PREROUTING -p icmp --icmp-type 8 -j NOTRACK
 iptables -t raw -I OUTPUT -p icmp --icmp-type 0 -j NOTRACK
 ```
 ____________________________________________________________________________
-# Module connlimit to reduce Limit Ddos Attack
+## Module connlimit to reduce Limit Ddos Attack
 
 * Limit 2 ssh sessions by host, if you try 3 ssh sessions the 3rd does not work
 ```
