@@ -90,7 +90,7 @@ ____________________________________________________________________________
 |8      |0      |Echo request   |x              |RFC792    |
 
 ```
-CLIENT
+CLIENT                            HOST
      ICMP echo Reply (8)  ---> NEW, RELATED, ESTABLISHED ------> ICMP echo Request (0)
 ```
 
@@ -180,7 +180,7 @@ ____________________________________________________________________________
 iptables -t nat -I POSTROUTING -p tcp --dport 22 -j SNAT --to 192.168.0.56
 ```
 ____________________________________________________________________________
-# Table raw - PREROUTING & OUTPUT
+# Table raw - PREROUTING & OUTPUT - reduce the connexion tracking size 
 iptables -t filter -I INPUT -p icmp --icmp-type 8  -j ACCEPT
 iptables -t filter -I OUTPUT -p icmp --icmp-type 0 -j ACCEPT
 
