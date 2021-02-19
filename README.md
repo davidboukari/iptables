@@ -292,6 +292,8 @@ iptables -t filter -A LOGDROP -j LOG --log-prefix "iptables: drop log "
 iptables -t filter -A LOGDROP -j DROP
 
 # Limit 10 ping / minute
-iptables -t filter -I INPUT -p icmp -m hashlimit --hashlimit-above 10/minute --hashlimit-mode srcip --hashlimit-srcmask 32 --hashlimit-name ping-restrict -m conntrack --ctstate NEW,RELATED,ESTABLISHED  -j LOGDROP
+iptables -t filter -I INPUT -p icmp -m hashlimit --hashlimit-above 10/minute --hashlimit-mode srcip \
+                                                 --hashlimit-srcmask 32 --hashlimit-name ping-restrict \
+                                                 -m conntrack --ctstate NEW,RELATED,ESTABLISHED  -j LOGDROP
 ```
 
