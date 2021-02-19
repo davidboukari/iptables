@@ -267,7 +267,21 @@ cat iptables
 systemctl restart logrotat
 ```
 
-
+____________________________________________________________________________
+## CUSTOM CHAINS
+* iptables -N newChain
+* iptables -t nat -N newChain
+```
+iptables -N ALLOWEDMGMT
+iptables -t filter -I INPUT -s 192.168.0.70 -j ALLOWEDMGMT
+iptables -nvL
+iptables -t filter -I ALLOWEDMGMT -m multiport --dports 22,80 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
+iptables -nvL
+...
+Chain ALLOWEDMGMT (2 references)
+ pkts bytes target     prot opt in     out     source               destination
+  319 19904 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 22,80 ctstate NEW,RELATED,ESTABLISHED
+```
 
 
 
