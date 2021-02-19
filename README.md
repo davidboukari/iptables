@@ -295,5 +295,18 @@ iptables -t filter -A LOGDROP -j DROP
 iptables -t filter -I INPUT -p icmp -m hashlimit --hashlimit-above 10/minute --hashlimit-mode srcip \
                                                  --hashlimit-srcmask 32 --hashlimit-name ping-restrict \
                                                  -m conntrack --ctstate NEW,RELATED,ESTABLISHED  -j LOGDROP
+
+# hashlimit bandwidth limiter
+apt-get install speedtest-cli
+# Download
+iptables -t filter -I INPUT -p tcp -m multiport --sports 80,443,8080 \ 
+                                                -m hashlimit --hashlimit-name hashlimit-download-max  --hashlimit-mode srcip \
+                                                --hashlimit-srcmask 32 --hashlimit-above 512kb/s -j LOGDROP
+
+# Upload
+iptables -t filter -I OUTPUT -p tcp -m multiport --dports 80,443,8080 \
+                                                 -m hashlimit --hashlimit-name hashlimit-upload-max  --hashlimit-mode dstip \
+                                                 --hashlimit-dstmask 32 --hashlimit-above 512kb/s -j LOGDROP
+
 ```
 
