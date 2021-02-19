@@ -196,8 +196,36 @@ ____________________________________________________________________________
 iptables -t filter -I INPUT -p tcp --dport 22 -m connlimit --connlimit-saddr --connlimit-mask 32 --connlimit-above 2 -j REJECT
 ```
 
+____________________________________________________________________________
+## LOG
+```
+iptables -t filter -nvL --line-numbers
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination
+1        0     0 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 #conn src/32 > 3 reject-with icmp-port-unreachable
+...
+10       0     0 ACCEPT     icmp --  *      *       0.0.0.0/0            0.0.0.0/0            ctstate RELATED,ESTABLISHED
+11    1952  303K DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0
 
+# Insert a rule at the position 11
+iptables -t filter -I INPUT 11  -j LOG --log-prefix "iptables dropped at INPUT "
+iptables -t filter -nvL --line-numbers
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination
+1       78 13764 REJECT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            tcp dpt:22 #conn src/32 > 3 reject-with icmp-port-unreachable
+...
+11       5   260 LOG        all  --  *      *       0.0.0.0/0            0.0.0.0/0            LOG flags 0 level 4 prefix "iptables DROP INPUT"
+12    1957  304K DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0
 
+tail -f /var/log/syslog
+Feb 19 07:59:38 linuxrtr kernel: [41371.170465] iptables DROP INPUTIN=eth0 ...
+
+# Log in OUTPUT
+iptables -t filter -I OUTPUT 5 -j LOG --log-prefix "iptables dropped OUTPUT "
+curl http://1.1.1.1:5000
+tail -f /var/log/syslog
+Feb 19 08:12:55 linuxrtr kernel: [42168.040789] iptables dropped OUTPUTIN= OUT=eth0 ...
+```
 
 
 
