@@ -188,13 +188,7 @@ iptables -t filter -I OUTPUT -p icmp --icmp-type 0 -j ACCEPT
 iptables -t raw -I PREROUTING -p icmp --icmp-type 8 -j NOTRACK
 iptables -t raw -I OUTPUT -p icmp --icmp-type 0 -j NOTRACK
 ```
-____________________________________________________________________________
-## Module connlimit to reduce Limit Ddos Attack
 
-* Limit 2 ssh sessions by host, if you try 3 ssh sessions the 3rd does not work
-```
-iptables -t filter -I INPUT -p tcp --dport 22 -m connlimit --connlimit-saddr --connlimit-mask 32 --connlimit-above 2 -j REJECT
-```
 
 ____________________________________________________________________________
 ## LOG
@@ -283,5 +277,21 @@ Chain ALLOWEDMGMT (2 references)
   319 19904 ACCEPT     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0            multiport dports 22,80 ctstate NEW,RELATED,ESTABLISHED
 ```
 
+____________________________________________________________________________
+## Module connlimit to reduce Limit Ddos Attack
+* Limit 2 ssh sessions by host, if you try 3 ssh sessions the 3rd does not work
+```
+iptables -t filter -I INPUT -p tcp --dport 22 -m connlimit --connlimit-saddr --connlimit-mask 32 --connlimit-above 2 -j REJECT
+```
+____________________________________________________________________________
+## hashlimit
+```
+# Create a custrom chain to log and drop
+iptables -N LOGDROP
+iptables -t filter -A LOGDROP -j LOG --log-prefix "iptables: drop log "
+iptables -t filter -A LOGDROP -j DROP
 
+# Limit 10 ping / minute
+iptables -t filter -I INPUT -p icmp -m hashlimit --hashlimit-above 10/minute --hashlimit-mode srcip --hashlimit-srcmask 32 --hashlimit-name ping-restrict -m conntrack --ctstate NEW,RELATED,ESTABLISHED  -j LOGDROP
+```
 
