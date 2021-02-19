@@ -179,6 +179,14 @@ ____________________________________________________________________________
 ```
 iptables -t nat -I POSTROUTING -p tcp --dport 22 -j SNAT --to 192.168.0.56
 ```
+____________________________________________________________________________
+# Table raw
+iptables -t filter -I INPUT -p icmp --icmp-type 8  -j ACCEPT
+iptables -t filter -I OUTPUT -p icmp --icmp-type 0 -j ACCEPT
+
+iptables -t raw -I PREROUTING -p icmp --icmp-type 8 -j NOTRACK
+iptables -t raw -I OUTPUT -p icmp --icmp-type 0 -j NOTRACK
+
 
 
 
