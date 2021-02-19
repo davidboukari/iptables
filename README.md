@@ -244,7 +244,7 @@ Feb 19 10:04:08 linuxrtr kernel: [48841.790463] iptables DROP INPUTIN=eth0 OUT=.
 ```
 
 * logrotate
-``
+```
 cd /etc/logrotate.d/
 ls
 alternatives  apache2  apport  apt  bootlog  btmp  conntrackd  dpkg  rsyslog  ubuntu-advantage-tools  ufw  unattended-upgrades  wtmp
