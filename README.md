@@ -49,8 +49,8 @@ ____________________________________________________________________________
 ## iptables diag
 ```
 PREROUTING ===========================> FORWARD ============================> POSTROUTING ==========>
-  raw: tracking ?                                           ||                mangle: headers (TTL,QoS,...)
-  mangle: change headers (TTL, QoS, ...)                    ||                nat: SNAT (because DEST is knew)
+  raw: tracking ?                                           /\                  mangle: headers (TTL,QoS,...)
+  mangle: change headers (TTL, QoS, ...)                    ||                  nat: SNAT (because DEST is knew)
   nat:  DNAT (because source is knew)                       ||
    ||                                                       ||
    ||                                                       ||                             
@@ -61,7 +61,7 @@ PREROUTING ===========================> FORWARD ============================> PO
                     ||                                      filter: firewalling ====> | -t filter -A OUTPUT ...    
                     ||                                      ||                  RULES | -t filter -A OUTPUT ...
                     ||                                      ||                        | -t filter -A OUTPUT ...  
-                    ||                                      ||                        | -t filter -A OUTPUT ...         
+                    \/                                      ||                        | -t filter -A OUTPUT ...         
                     =============> LOCAL PROCESS =============>                       | -t filter -A OUTPUT ...         
                                                                                             ======> |  ACCEPT                                
                                                                                            TARGETS  | Targets DROP                              
