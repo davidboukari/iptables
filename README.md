@@ -49,24 +49,28 @@ ____________________________________________________________________________
 ## iptables diag
 ```
 PREROUTING ===========================> FORWARD ============================> POSTROUTING ==========>
-  raw: tracking ?                                             ||                mangle: headers (TTL,QoS,...)
-  mangle: change headers (TTL, QoS, ...)                      ||                nat: SNAT (because DEST is knew)
-  nat:  DNAT (because source is knew)                         ||
-   ||                                                         ||
-   ||                                                         ||                             
-   =============> INPUT                                     OUTPUT
-                    mangle: headers (TTL,QoS,...)             raw: tracking  
-                    nat: SNAT (because dest=localhost).       mangle: headers (TTL,QoS,...)
-                    filter: firewalling                       nat: DNAT (because source=localhost)
-                    ||                                        filter: firewalling ====> | Rules -t filter -A OUTPUT ...    
-                    ||                                        ||                        | Rules -t filter -A OUTPUT ...
-                    ||                                        ||                        | Rules -t filter -A OUTPUT ...  =====> | Targets ACCEPT
-                    ||                                        ||                        | Rules -t filter -A OUTPUT ...         | Targets DROP 
-                    =============> LOCAL PROCESS =============>                         | Rules -t filter -A OUTPUT ...         | Targets REJECT 
-                                                                                                                                | Targets LOG
-                                                                                                                                | Targets SNAT
-                                                                                                                                | Targets DNAT
-                                                                                                                                | Targets NOTRACK
+  raw: tracking ?                                           ||                mangle: headers (TTL,QoS,...)
+  mangle: change headers (TTL, QoS, ...)                    ||                nat: SNAT (because DEST is knew)
+  nat:  DNAT (because source is knew)                       ||
+   ||                                                       ||
+   ||                                                       ||                             
+   =============> INPUT                                   OUTPUT
+                    mangle: headers (TTL,QoS,...)           raw: tracking  
+                    nat: SNAT (dest=localhost).             mangle: headers (TTL,QoS,...)
+                    filter: firewalling                     nat: DNAT (because source=localhost)
+                    ||                                      filter: firewalling ====> | -t filter -A OUTPUT ...    
+                    ||                                      ||                  RULES | -t filter -A OUTPUT ...
+                    ||                                      ||                        | -t filter -A OUTPUT ...  
+                    ||                                      ||                        | -t filter -A OUTPUT ...         
+                    =============> LOCAL PROCESS =============>                       | -t filter -A OUTPUT ...         
+                                                                                            ======> |  ACCEPT                                
+                                                                                           TARGETS  | Targets DROP                              
+                                                                                                    | Targets REJECT                           
+                                                                                                    | Targets LOG                       
+                                                                                                    | Targets SNAT                          
+                                                                                                    | Targets DNAT                            
+                                                                                                    | Targets NOTRACK                            
+                                                                                                                                
                     
                     
                     
