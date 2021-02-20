@@ -44,11 +44,39 @@ ____________________________________________________________________________
 * iptables -nvL --line-numbers
 * iptables -D INPUT 1
 * iptables -D OUTPUT 1
+
+____________________________________________________________________________
+## iptables diag
+```
+PREROUTING ===========================> FORWARD ============================> POSTROUTING ==========>
+  raw: tracking ?                                             ||                mangle: headers (TTL,QoS,...)
+  mangle: change headers (TTL, QoS, ...)                      ||                nat: SNAT (because DEST is knew)
+  nat:  DNAT (because source is knew)                         ||
+   ||                                                         ||
+   ||                                                         ||                             
+   =============> INPUT                                     OUTPUT
+                    mangle: headers (TTL,QoS,...)             raw: tracking  
+                    nat: SNAT (because dest=localhost).       mangle: headers (TTL,QoS,...)
+                    filter: firewalling                       nat: DNAT (because source=localhost)
+                    ||                                        filter: firewalling ====> | Rules -t filter -A OUTPUT ...    
+                    ||                                        ||                        | Rules -t filter -A OUTPUT ...
+                    ||                                        ||                        | Rules -t filter -A OUTPUT ...  =====> | Targets ACCEPT
+                    ||                                        ||                        | Rules -t filter -A OUTPUT ...         | Targets DROP 
+                    =============> LOCAL PROCESS =============>                         | Rules -t filter -A OUTPUT ...         | Targets REJECT 
+                                                                                                                                | Targets LOG
+                                                                                                                                | Targets SNAT
+                                                                                                                                | Targets DNAT
+                                                                                                                                | Targets NOTRACK
+                    
+                    
+                    
+```
+
 ____________________________________________________________________________
 ## Modules
 * https://ipset.netfilter.org/iptables-extensions.man.html
 
-### Conntrack 
+### iptables states - Conntrack 
 * apt-get install conntrack
 
 * conntrackd https://conntrack-tools.netfilter.org/manual.html 
