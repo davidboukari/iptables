@@ -310,3 +310,17 @@ iptables -t filter -I OUTPUT -p tcp -m multiport --dports 80,443,8080 \
 
 ```
 
+____________________________________________________________________________
+## user / group traffic restriction
+```
+# By user
+iptables -t filter -I OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -m owner --uid-owner user1 -j DROP
+iptables -t filter -I OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -m owner --uid-owner user1 -j LOG --log-uid --log-prefix "iptables: user1 tcp/22 deny "
+
+# By Group
+groupadd restrictedusers
+useradd -m -g restrictedusers user2
+
+iptables -t filter -I OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -m owner --gid-owner restrictedusers -j DROP
+iptables -t filter -I OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -m owner --gid-owner restrictedusers -j LOG --log-uid --log-prefix 'iptables: restrictedueser tcp/22 deny '
+```
