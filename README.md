@@ -356,3 +356,33 @@ useradd -m -g restrictedusers user2
 iptables -t filter -I OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -m owner --gid-owner restrictedusers -j DROP
 iptables -t filter -I OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -m owner --gid-owner restrictedusers -j LOG --log-uid --log-prefix 'iptables: restrictedueser tcp/22 deny '
 ```
+
+
+____________________________________________________________________________
+## ipset to group ips & ports
+```
+apt-get install ipset
+
+ipset create ALlOWEDMGMTPORTS bitmap:port range 0-65535
+ipset add ALLOWEDMGMT 192.168.0.0/24
+ipset add ALLOWEDMGMT 192.168.101.1
+ipset list
+
+ipset create aLLOWEDMGMT hash:net
+ipset add ALLOWEDMGMTPORTS tcp:22
+ipset add ALLOWEDMGMTPORTS tcp:80
+ipset add ALLOWEDMGMTPORTS tcp:8080
+ipset add ALLOWEDMGMTPORTS udp:53
+ipset list
+
+iptables -t filter -I INPUT -m set --match-set ALLOWEDMGMT src -m set --match-set. ALLOWEDMGMTPORTS dst -m contrack -ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
+
+iptables -t filter -I INPUT -m match --match-set ALLOWEDMGMTPORTS dst j LOGDROP
+
+ipset del ALLOWEDMGMT 192.168.101.1
+ipset del ALLOWEDMGMTPORTS 53
+ipset del ALLOWEDMGMTPORTS 80
+ipset del ALLOWEDMGMTPORTS 8080
+ipset list
+
+```
