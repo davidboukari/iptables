@@ -250,6 +250,24 @@ iptables -t filter -I FORWARD -p tcp --dport 12345 -i eth2 -o eth0 -m conntrack 
 iptables -t filter -I FORWARD -p tcp --dport 12345 -i eth2 -o eth0 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j DROP
 ```
 
+## Filtering FORWARD Chain
+```
+# Drop all FORWARD packet from eth2 -> eth1
+iptables -t filter -A FORWARD  -i eth2 -o eth0  -j LOGDROP
+
+# Insert before ACCEPT FORWARD packet -A FORWARD tcp/12345  -i eth2 -o eth0
+iptables -t filter -I FORWARD -p tcp --dport 12345 -i eth2 -o eth0 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
+
+# Insert before before LOG FORWARD packet -A FORWARD tcp/12345  -i eth2 -o eth0
+iptables -t filter -I FORWARD -p tcp --dport 12345 -i eth2 -o eth0 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j LOG "iptables: OK eth2 tcp/12345"
+
+iptables -t filter -nvL --line-numbers
+Chain FORWARD (policy ACCEPT 132 packets, 13567 bytes)
+num   pkts bytes target     prot opt in     out     source               destination
+1        6   331 LOG        tcp  --  eth2   eth0    0.0.0.0/0            0.0.0.0/0            tcp dpt:12345 ctstate NEW,RELATED,ESTABLISHED LOG flags 0 level 4 prefix "iptables: ACCEPT eth2 tcp/123"
+2       12   669 ACCEPT     tcp  --  eth2   eth0    0.0.0.0/0            0.0.0.0/0            tcp dpt:12345 ctstate NEW,RELATED,ESTABLISHED
+```
+
 ____________________________________________________________________________
 ### Table raw - PREROUTING & OUTPUT - reduce the connexion tracking size
 ```
