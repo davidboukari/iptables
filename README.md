@@ -244,6 +244,10 @@ iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 # OR
 iptables -t nat -I POSTROUTING  -o eth0 -j SNAT --to 192.168.0.54
 
+
+# Filtering FORWARD Chain
+iptables -t filter -I FORWARD -p tcp --dport 12345 -i eth2 -o eth0 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j LOG --log-prefix "iptables: Dropped eth2 tcp/12345"
+iptables -t filter -I FORWARD -p tcp --dport 12345 -i eth2 -o eth0 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j DROP
 ```
 
 ____________________________________________________________________________
