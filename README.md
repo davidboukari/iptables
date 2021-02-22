@@ -2,6 +2,9 @@
 
 
 ## Configure network
+* https://github.com/davidboukari/network
+
+
 ### static old method
 ```
 cat /etc/network/interfaces
