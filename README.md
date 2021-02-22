@@ -451,3 +451,52 @@ ipset del ALLOWEDMGMTPORTS 80
 ipset del ALLOWEDMGMTPORTS 8080
 ipset list
 ```
+
+### ipset block ips
+* https://github.com/trick77/ipset-blacklist
+```
+# get the source
+apt-get install -y git
+git clone https://github.com/trick77/ipset-blacklist.git
+mkdir -p /etc/ipset-blacklist
+
+# Tunning
+cat ipset-blacklist.conf
+MAXELEN=264000
+HASHSIZE=32768
+
+# build the blacklist
+./update-blacklist.sh ipset-blacklist.conf
+.........
+Blacklisted addresses found: 46121
+ipset list
+iptables -t filter -nvL --line-numbers
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+num   pkts bytes target     prot opt in     out     source               destination
+1        0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0            match-set blacklist src
+
+# Add to drop list ipset-blacklist.conf - see: https://rules.emergingthreats.net/fwrules/
+https://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt
+./update-blacklist.sh ipset-blacklist.conf
+..........
+Blacklisted addresses found: 55193
+
+# destroy the blacklist
+ipset destroy blacklist
+# Remove the input listcreate the blacklist:
+ipset create blacklist -exist hash:net family inet hashsize 32768 maxelem 264000
+iptables -I INPUT 1 -m set --match-set blacklist src -j DROP
+iptables -I OUTPUT -m set --match-set blacklist dst -j LOGDROP
+```
+
+#### Set persitant ipset
+```
+ipset save > /etc/ipset.conf
+cd /usr/share/netfillter-persistent/plugins.d/
+cat /usr/share/netfilter-persistant/plugins.d/10-ipset
+#!/bin/bash
+/sbin/ipset restore -! < /etc/ipset.conf
+
+# Can reboot to check that all rules have been loaded
+```
+
