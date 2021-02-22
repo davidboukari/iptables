@@ -430,26 +430,24 @@ ____________________________________________________________________________
 ```
 apt-get install ipset
 
-ipset create ALlOWEDMGMTPORTS bitmap:port range 0-65535
+ipset create ALLOWEDMGMT hash:net
 ipset add ALLOWEDMGMT 192.168.0.0/24
 ipset add ALLOWEDMGMT 192.168.101.1
 ipset list
 
-ipset create ALLOWEDMGMT hash:net
+ipset create ALLOWEDMGMTPORTS bitmap:port range 0-65535
 ipset add ALLOWEDMGMTPORTS tcp:22
 ipset add ALLOWEDMGMTPORTS tcp:80
 ipset add ALLOWEDMGMTPORTS tcp:8080
 ipset add ALLOWEDMGMTPORTS udp:53
 ipset list
 
-iptables -t filter -I INPUT -m set --match-set ALLOWEDMGMT src -m set --match-set. ALLOWEDMGMTPORTS dst -m contrack -ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
-
-iptables -t filter -I INPUT -m match --match-set ALLOWEDMGMTPORTS dst j LOGDROP
+iptables -t filter -I INPUT -m set --match-set ALLOWEDMGMT src -m set --match-set ALLOWEDMGMTPORTS dst -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
+iptables -t filter -I INPUT -m set --match-set ALLOWEDMGMTPORTS dst -j LOGDROP
 
 ipset del ALLOWEDMGMT 192.168.101.1
 ipset del ALLOWEDMGMTPORTS 53
 ipset del ALLOWEDMGMTPORTS 80
 ipset del ALLOWEDMGMTPORTS 8080
 ipset list
-
 ```
