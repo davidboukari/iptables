@@ -5,6 +5,16 @@
 * https://github.com/davidboukari/network
 
 
+```
+ip a
+ip addr show
+ip route show
+ip addr flush dev eth1
+ip addr add 192.168.1.1/24 dev eth1
+ip link set eth1 up
+ip route add default via 192.168.1.1
+```
+
 ### static old method
 ```
 cat /etc/network/interfaces
