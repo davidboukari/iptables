@@ -435,7 +435,7 @@ ipset add ALLOWEDMGMT 192.168.0.0/24
 ipset add ALLOWEDMGMT 192.168.101.1
 ipset list
 
-ipset create aLLOWEDMGMT hash:net
+ipset create ALLOWEDMGMT hash:net
 ipset add ALLOWEDMGMTPORTS tcp:22
 ipset add ALLOWEDMGMTPORTS tcp:80
 ipset add ALLOWEDMGMTPORTS tcp:8080
