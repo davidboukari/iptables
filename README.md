@@ -215,9 +215,12 @@ ____________________________________________________________________________
 ## FORWARD - 2 interfaces -  Masqueradng e
 ```
 echo 1 > /proc/sys/net/ipv4/ip_forward
+# Accept paquet to wlan1
 iptables -t filter -A INPUT -i wlan1 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
+# Accept FORWARDING between the 2 interfaces
 iptables -A FORWARD -i wlan1 -o wlan0 -j ACCEPT
 iptables -A FORWARD -i wlan0 -o wlan1 -m state --state ESTABLISHED,RELATED -j ACCEPT
+# MASQUERADE paquet for others if it is not for wlan0
 iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
 ```
 ____________________________________________________________________________
