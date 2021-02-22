@@ -61,6 +61,8 @@ ____________________________________________________________________________
 ____________________________________________________________________________
 ## iptables diag
 ```
+                                          mangle: headers
+                                          filter: firewalling
 PREROUTING ===========================> FORWARD ============================> POSTROUTING ==========>
   raw: tracking ?                                           /\                  mangle: headers (TTL,QoS,...)
   mangle: change headers (TTL, QoS, ...)                    ||                  nat: SNAT (because DEST is knew)
