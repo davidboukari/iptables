@@ -212,6 +212,15 @@ ____________________________________________________________________________
 iptables -t nat -I POSTROUTING -p tcp --dport 22 -j SNAT --to 192.168.0.56
 ```
 ____________________________________________________________________________
+## FORWARD - 2 interfaces -  Masqueradng e
+```
+echo 1 > /proc/sys/net/ipv4/ip_forward
+iptables -t filter -A INPUT -i wlan1 -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i wlan1 -o wlan0 -j ACCEPT
+iptables -A FORWARD -i wlan0 -o wlan1 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -t nat -A POSTROUTING -o wlan0 -j MASQUERADE
+```
+____________________________________________________________________________
 ### Table raw - PREROUTING & OUTPUT - reduce the connexion tracking size
 ```
 iptables -t filter -I INPUT -p icmp --icmp-type 8  -j ACCEPT
