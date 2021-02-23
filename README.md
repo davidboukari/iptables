@@ -1,5 +1,8 @@
 # iptables
 
+## firewalld
+* https://github.com/davidboukari/firewalld
+
 ## Configure DNS resolver
 ```
 # DNS
