@@ -13,11 +13,10 @@
 mv /etc/resolv.conf /etc/resolv.conf.ini
 ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 ```
-```
+
 
 ## Configure network
 * https://github.com/davidboukari/network
-
 
 ```
 ip a
