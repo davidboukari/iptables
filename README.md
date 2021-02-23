@@ -7,8 +7,8 @@
 * https://github.com/davidboukari/firewalld
 
 ## Configure DNS resolver
-```
-# DNS
+
+### DNS
 ```
 mv /etc/resolv.conf /etc/resolv.conf.ini
 ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
