@@ -435,6 +435,7 @@ ____________________________________________________________________________
 ```
 apt-get install ipset
 
+ipset  list |grep -i name
 ipset create ALLOWEDMGMT hash:net
 ipset add ALLOWEDMGMT 192.168.0.0/24
 ipset add ALLOWEDMGMT 192.168.101.1
