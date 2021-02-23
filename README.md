@@ -506,3 +506,108 @@ cat /usr/share/netfilter-persistant/plugins.d/10-ipset
 # Can reboot to check that all rules have been loaded
 ```
 
+_____________________________________
+## FQDN
+```
+apt-get install -y dnsmasq
+ cat  /etc/dnsmasq.d/confperso
+max-cache-ttl=120
+server=8.8.8.8
+ipset=/test.iptablesexpert.com/specialaccess,allowedincoming
+listen-address=127.0.0.1
+no-dhcp-interface=
+bind-interfaces
+```
+
+### set DNS to 127.0.0.1
+* Edit DNS in  /etc/netplan/01-installer-config.yaml
+* Edit DNS in /etc/systemd/resolved.conf
+
+```
+iptables -t filter -I INPUT -s 127.0.0.1 -d 127.0.0.1 -p udp --dport 53 -j ACCEPT
+iptables -t filter -I OUTPUT -s 127.0.0.1 -d 127.0.0.1 -p udp --sport 53 -j ACCE
+nslookup google.com
+Server:         127.0.0.1
+Address:        127.0.0.1#53
+
+Non-authoritative answer:
+Name:   google.com
+Address: 216.58.201.238
+Name:   google.com
+Address: 2a00:1450:4007:806::200e
+```
+
+### ipset specialaccess,  allowedincoming  list are automatically updated
+```
+ipset create specialaccess hash:net timeout 600
+root@linuxrtr:/home/ubuntu# ipset create allowedincoming hash:net timeout 600
+root@linuxrtr:/home/ubuntu# ipset list allowedincoming
+Name: allowedincoming
+Type: hash:net
+Revision: 6
+Header: family inet hashsize 1024 maxelem 65536 timeout 600
+Size in memory: 448
+References: 0
+Number of entries: 0
+Members:
+root@linuxrtr:/home/ubuntu# nslookup test.iptablesexpert.com
+Server:         127.0.0.1
+Address:        127.0.0.1#53
+
+Non-authoritative answer:
+Name:   test.iptablesexpert.com
+Address: 192.168.0.70
+
+root@linuxrtr:/home/ubuntu# ipset list allowedincoming
+Name: allowedincoming
+Type: hash:net
+Revision: 6
+Header: family inet hashsize 1024 maxelem 65536 timeout 600
+Size in memory: 544
+References: 0
+Number of entries: 1
+Members:
+192.168.0.70 timeout 593
+root@linuxrtr:/home/ubuntu# ipset list specialaccess
+Name: specialaccess
+Type: hash:net
+Revision: 6
+Header: family inet hashsize 1024 maxelem 65536 timeout 600
+Size in memory: 544
+References: 0
+Number of entries: 1
+Members:
+192.168.0.70 timeout 570
+```
+
+### backup the ipset list
+```
+ipset save|grep allowedincoming > /etc/ipset.conf
+```
+
+```
+cat /etc/apache2/ports.conf
+# If you just change the port or add more ports here, you will likely also
+# have to change the VirtualHost statement in
+# /etc/apache2/sites-enabled/000-default.conf
+
+Listen 80
+Listen 8080
+Listen 8095
+Listen 8096
+
+ipset add ALLOWEDMGMTPORTS tcp:8095
+ipset add ALLOWEDMGMTPORTS tcp:8096
+
+ipset list ALLOWEDMGMTPORTS
+22
+53
+80
+8080
+8095
+8096
+
+iptables -t filter -I INPUT -m set --match-set specialaccess src -m set --match-set ALLOWEDMGMTPORTS dst -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
+
+iptables -t filter -I OUTPUT -m set --match-set ALLOWEDMGMTPORTS src  -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+```
