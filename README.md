@@ -611,3 +611,36 @@ iptables -t filter -I INPUT -m set --match-set specialaccess src -m set --match-
 
 iptables -t filter -I OUTPUT -m set --match-set ALLOWEDMGMTPORTS src  -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 ```
+
+
+## Geoloc
+```
+sudo apt-get install -y  xtables-addons-common xtables-addons-dkms
+sudo apt-get install libtext-csv-xs-perl
+
+sudo mkdir /usr/share/xt_geoip
+# download the geoip
+/usr/lib/xtables-addons/xt_geoip_dl
+
+# create the generator file
+cat xtgeoipupdate.sh
+#!/bin/bash
+
+tmpdir=$(mktemp -d)
+csv_files="${tmpdir}/dbip-country-lite.csv"
+current_folder=$PWD
+cd "${tmpdir}"
+/usr/lib/xtables-addons/xt_geoip_dl
+/usr/lib/xtables-addons/xt_geoip_build -D /usr/share/xt_geoip "${csv_files}°
+cd $current_folder
+rm -r ${tmpdir}
+exit 0
+
+./xtgeoipupdate.sh
+
+ls /usr/share/xt_geoip
+apt-get install geoip-database
+apt-get install geoipupdate
+apt-get install geoip-bin
+```
+
