@@ -91,13 +91,13 @@ PREROUTING ===========================> FORWARD ============================> PO
                     ||                                      ||                        | -t filter -A OUTPUT ...  
                     \/                                      ||                        | -t filter -A OUTPUT ...         
                     =============> LOCAL PROCESS =============>                       | -t filter -A OUTPUT ...         
-                                                                                            ======> |  ACCEPT                                
-                                                                                           TARGETS  | Targets DROP                              
-                                                                                                    | Targets REJECT                           
-                                                                                                    | Targets LOG                       
-                                                                                                    | Targets SNAT                          
-                                                                                                    | Targets DNAT                            
-                                                                                                    | Targets NOTRACK                            
+                                                                                            ======> | ACCEPT                                
+                                                                                           TARGETS  | DROP                              
+                                                                                                    | REJECT                           
+                                                                                                    | LOG                       
+                                                                                                    | SNAT                          
+                                                                                                    | DNAT                            
+                                                                                                    | NOTRACK                            
                                                                                                                                 
                     
                     
