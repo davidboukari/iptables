@@ -219,7 +219,8 @@ ____________________________________________________________________________
 PREROUTING dport 2222 -> DNAT -> dport=22
 ```
 iptables -t nat -A PREROUTING -p tcp --dport 2222 -j DNAT ip:22
-iptables -t nat PREROUTING -p tcp -m tcp --dport 2222 -j DNAT --to-destination 192.168.0.54:22
+iptables -t nat -A PREROUTING -p tcp -m tcp --dport 2222 -j DNAT --to-destination 192.168.0.54:22
+iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination :5601
 ```
 
 ____________________________________________________________________________
