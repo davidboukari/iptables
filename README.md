@@ -22,6 +22,18 @@ ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
 ____________________________________________________________________________
 ## Log to a file & log rotate
+
+* Log everythings
+```
+iptables -I INPUT 1 -j LOG
+iptables -I FORWARD 1 -j LOG
+iptables -I OUTPUT 1 -j LOG
+
+iptables -t nat -I PREROUTING 1 -j LOG
+iptables -t nat -I POSTROUTING 1 -j LOG
+iptables -t nat -I OUTPUT 1 -j LOG
+```
+
 * rsyslog
 ```
 ls /etc/rsyslog.d/
