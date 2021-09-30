@@ -33,6 +33,7 @@ then {
   stop
 }
 systemctl restart rsyslog
+systemctl restart firewalld.service
 tail -n 2  /var/log/iptables.log
 Feb 19 10:04:08 linuxrtr kernel: [48841.790463] iptables DROP INPUTIN=eth0 OUT=..
 ```
