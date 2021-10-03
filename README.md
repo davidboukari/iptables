@@ -19,7 +19,10 @@
 mv /etc/resolv.conf /etc/resolv.conf.ini
 ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 ```
-
+### Add vnc access
+```
+iptables -t filter -I INPUT -p tcp  --dport 5901  -j ACCEPT
+```
 ____________________________________________________________________________
 ## Log to a file & log rotate
 
