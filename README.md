@@ -59,9 +59,8 @@ cd /etc/logrotate.d/
 ls
 alternatives  apache2  apport  apt  bootlog  btmp  conntrackd  dpkg  rsyslog  ubuntu-advantage-tools  ufw  unattended-upgrades  wtmp
 cp ufw iptables
-vim iptables
-cat iptables
-/var/log/iptables.log
+
+tee /etc/logrotate.d/iptables<<EOF
 {
         rotate 7
         weekly
@@ -74,6 +73,7 @@ cat iptables
                 invoke-rc.d rsyslog rotate >/dev/null 2>&1 || true
         endscript
 }
+EOF
 systemctl restart logrotat
 ```
 
