@@ -668,3 +668,16 @@ apt-get install geoipupdate
 apt-get install geoip-bin
 ```
 
+## vnc redirect to localhost
+```
+#!/bin/bash
+
+iptables -t nat -I PREROUTING -p tcp --dport 5909 -j REDIRECT --to-ports 5901
+iptables -t nat -I OUTPUT -p tcp -o lo --dport 5901 -j REDIRECT --to-ports 5909
+```
+
+## Forward to localhost is a redirect
+```
+iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 5901
+iptables -t nat -I OUTPUT -p tcp -o lo --dport 5901 -j REDIRECT --to-ports 443
+```
