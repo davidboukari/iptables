@@ -669,6 +669,7 @@ apt-get install geoip-bin
 ```
 
 ## vnc redirect to localhost
+* https://serverfault.com/questions/211536/iptables-port-redirect-not-working-for-localhost
 ```
 #!/bin/bash
 
