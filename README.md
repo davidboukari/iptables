@@ -41,12 +41,13 @@ iptables -t nat -I OUTPUT 1 -j LOG
 ```
 ls /etc/rsyslog.d/
 20-ufw.conf  21-cloudinit.conf  50-default.conf
-vim /etc/rsyslog.d/10-iptables.conf
+cat /etc/rsyslog.d/10-iptables.conf<<EOF
 if ( $msg contains 'iptables' )
 then {
-  /var/log/iptables.log
+  /var/log/iptables.log
   stop
 }
+EOF
 systemctl restart rsyslog
 systemctl restart firewalld.service
 tail -n 2  /var/log/iptables.log
