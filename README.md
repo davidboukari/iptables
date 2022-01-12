@@ -42,7 +42,7 @@ iptables -t nat -I OUTPUT 1 -j LOG
 ls /etc/rsyslog.d/
 20-ufw.conf  21-cloudinit.conf  50-default.conf
 tee /etc/rsyslog.d/10-iptables.conf<<EOF
-if ( $msg contains 'iptables' )
+if ( \$msg contains 'iptables' )
 then {
   /var/log/iptables.log
   stop
