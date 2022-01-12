@@ -26,6 +26,26 @@ iptables -t filter -I INPUT -p tcp  --dport 5901  -j ACCEPT
 ____________________________________________________________________________
 ## Log to a file & log rotate
 
+https://www.opensourcerers.org/2016/05/27/how-to-trace-iptables-in-rhel7-centos7/
+```
+
+    Load the (IPv4) netfilter log kernel module:
+    # modprobe nf_log_ipv4
+    Enable logging for the IPv4 (AF Family 2):
+    # sysctl net.netfilter.nf_log.2=nf_log_ipv4
+    reconfigure rsyslogd to log kernel messages (kern.*) to /var/log/messages:
+
+    reconfigure rsyslogd to log kernel messages (kern.*) to /var/log/messages:
+
+# cat /etc/rsyslog.conf | grep -e "^kern"
+kern.*;*.info;mail.none;authpriv.none;cron.none                /var/log/messages
+
+    restart rsyslogd:
+    # systemctl restart rsyslog
+
+iptables -t raw -L
+```
+
 * Log everythings
 ```
 iptables -I INPUT 1 -j LOG
