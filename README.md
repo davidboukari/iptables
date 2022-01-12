@@ -29,11 +29,20 @@ ____________________________________________________________________________
 https://www.opensourcerers.org/2016/05/27/how-to-trace-iptables-in-rhel7-centos7/
 ```
 
+modprobe nf_log_ipv4
+sysctl net.netfilter.nf_log.2=nf_log_ipv4
+systemctl restart rsyslog
+
+# Log some packet
+iptables -t raw -j TRACE -p tcp --dport 80 -I PREROUTING 1
+iptables -t raw -j TRACE -p tcp --dport 80 -I OUTPUT 1
+----------------
+
     Load the (IPv4) netfilter log kernel module:
     # modprobe nf_log_ipv4
     Enable logging for the IPv4 (AF Family 2):
     # sysctl net.netfilter.nf_log.2=nf_log_ipv4
-    reconfigure rsyslogd to log kernel messages (kern.*) to /var/log/messages:
+  
 
     reconfigure rsyslogd to log kernel messages (kern.*) to /var/log/messages:
 
@@ -44,6 +53,9 @@ kern.*;*.info;mail.none;authpriv.none;cron.none                /var/log/messages
     # systemctl restart rsyslog
 
 iptables -t raw -L
+
+iptables -t raw -j TRACE -p tcp --dport 80 -I PREROUTING 1
+iptables -t raw -j TRACE -p tcp --dport 80 -I OUTPUT 1
 ```
 
 * Log everythings
