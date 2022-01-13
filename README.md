@@ -28,6 +28,7 @@ ____________________________________________________________________________
 
 * https://www.opensourcerers.org/2016/05/27/how-to-trace-iptables-in-rhel7-centos7/
 * https://qastack.fr/server/385937/how-to-enable-iptables-trace-target-on-debian-squeeze-6
+* https://sleeplessbeastie.eu/2020/11/13/how-to-trace-packets-as-they-pass-through-the-firewall/
 ```
 
 modprobe nf_log_ipv4
