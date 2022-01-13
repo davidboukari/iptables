@@ -40,6 +40,10 @@ iptables -t raw -j TRACE -p tcp --dport 80 -I OUTPUT 1
 
 # To show
 iptables -L -v -t raw
+
+# To dele
+iptables -t raw -D PREROUTING 2
+iptables -t raw -D OUTPUT 1
 ----------------
 
     Load the (IPv4) netfilter log kernel module:
