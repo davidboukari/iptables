@@ -37,7 +37,11 @@ systemctl restart rsyslog
 
 # Log some packet
 iptables -t raw -j TRACE -p tcp --dport 80 -I PREROUTING 1
-iptables -t raw -j TRACE -p tcp --dport 80 -I OUTPUT 1
+iptables -t raw -j TRACE -p tcp --dport 80 -I OUTPUT 1   
+
+iptables -t raw -j TRACE -p tcp --dport 53 -I PREROUTING 1
+iptables -t raw -j TRACE -p tcp --dport 53 -I OUTPUT 1
+
 
 # To show
 iptables -L -v -t raw
