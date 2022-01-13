@@ -46,7 +46,7 @@ iptables -t raw -j TRACE -p tcp --dport 53 -I OUTPUT 1
 # To show
 iptables -L -v -t raw
 
-# To dele
+# To delete rule
 iptables -t raw -D PREROUTING 2
 iptables -t raw -D OUTPUT 1
 ----------------
