@@ -26,7 +26,8 @@ iptables -t filter -I INPUT -p tcp  --dport 5901  -j ACCEPT
 ____________________________________________________________________________
 ## Log to a file & log rotate
 
-https://www.opensourcerers.org/2016/05/27/how-to-trace-iptables-in-rhel7-centos7/
+* https://www.opensourcerers.org/2016/05/27/how-to-trace-iptables-in-rhel7-centos7/
+* https://qastack.fr/server/385937/how-to-enable-iptables-trace-target-on-debian-squeeze-6
 ```
 
 modprobe nf_log_ipv4
