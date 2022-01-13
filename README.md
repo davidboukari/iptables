@@ -715,3 +715,45 @@ iptables -t nat -I OUTPUT -p tcp -o lo --dport 5901 -j REDIRECT --to-ports 5909
 iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 5901
 iptables -t nat -I OUTPUT -p tcp -o lo --dport 5901 -j REDIRECT --to-ports 443
 ```
+
+
+## NFT
+```
+nft list ruleset
+table ip filter {
+	chain INPUT {
+		type filter hook input priority filter; policy accept;
+		meta l4proto tcp tcp dport 22 counter packets 11140 bytes 1189608 jump f2b-sshd
+	}
+
+	chain FORWARD {
+		type filter hook forward priority filter; policy accept;
+		meta l4proto tcp ip saddr 172.17.0.0/16 ip daddr 172.17.0.0/16 tcp dport 13306 counter packets 0 bytes 0 accept
+		meta l4proto tcp ip daddr 172.17.0.0/16 tcp dport 3306 counter packets 0 bytes 0 drop
+		meta l4proto tcp ip saddr 172.17.0.0/16 ip daddr 172.17.0.0/16 tcp dport 13306 counter packets 0 bytes 0 accept
+		meta l4proto tcp ip daddr 172.17.0.0/16 tcp dport 3306 counter packets 0 bytes 0 drop
+		meta l4proto tcp ip saddr 172.17.0.0/16 ip daddr 172.17.0.0/16 tcp dport 13306 counter packets 0 bytes 0 accept
+		meta l4proto tcp ip daddr 172.17.0.0/16 tcp dport 13306 counter packets 0 bytes 0 drop
+		meta l4proto tcp ip daddr 172.17.0.0/16 tcp dport 3306 counter packets 0 bytes 0 drop
+	}
+
+	chain OUTPUT {
+		type filter hook output priority filter; policy accept;
+	}
+
+	chain f2b-sshd {
+		counter packets 11032 bytes 1173296 return
+	}
+}
+table ip raw {
+	chain PREROUTING {
+		type filter hook prerouting priority raw; policy accept;
+		meta l4proto tcp tcp dport 13306 counter packets 501 bytes 26027 meta nftrace set 1
+		meta l4proto tcp tcp dport 13306 counter packets 525 bytes 27809 meta nftrace set 1
+		meta l4proto tcp tcp dport 13306 counter packets 533 bytes 28734 meta nftrace set 1
+		meta l4proto tcp tcp dport 13306 counter packets 561 bytes 30250 meta nftrace set 1
+	}
+
+
+
+```
