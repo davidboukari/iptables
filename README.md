@@ -103,11 +103,16 @@ iptables -t raw -A OUTPUT -p udp --sport 53 -j TRACE
 iptables -t raw -A OUTPUT -p udp --dport 53 -j TRACE
 ```
 
-## Monitor trace
+## show Trace logs & Monitor trace
 * https://wiki.nftables.org/wiki-nftables/index.php/Ruleset_debug/tracing
 * https://stackoverflow.com/questions/63791460/debian-buster-10-iptables-raw-trace-no-logs
+
 ```
-nft monitor trace
+modprobe nf_log_ipv4
+sysctl net.netfilter.nf_log.2=nf_log_ipv4
+systemctl restart rsyslog
+
+$ nft monitor trace
 trace id 802a6813 ip raw OUTPUT packet: oif "eth0" ip saddr 192.168.0.88 ip daddr 208.67.222.222 ip dscp cs0 ip ecn not-ect ip ttl 64 ip id 32950 ip length 75 udp sport 54299 udp dport domain udp length 55 @th,64,96 4657996495637740913470472193
 trace id 802a6813 ip raw OUTPUT rule meta l4proto udp udp dport 53 counter packets 10694 bytes 669129 nftrace set 1 (verdict continue)
 trace id 802a6813 ip raw OUTPUT verdict continue
