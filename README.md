@@ -29,8 +29,8 @@ ____________________________________________________________________________
 * https://www.opensourcerers.org/2016/05/27/how-to-trace-iptables-in-rhel7-centos7/
 * https://qastack.fr/server/385937/how-to-enable-iptables-trace-target-on-debian-squeeze-6
 * https://sleeplessbeastie.eu/2020/11/13/how-to-trace-packets-as-they-pass-through-the-firewall/
-```
 
+```
 modprobe nf_log_ipv4
 sysctl net.netfilter.nf_log.2=nf_log_ipv4
 systemctl restart rsyslog
@@ -63,7 +63,7 @@ iptables -t raw -A OUTPUT -p udp --dport 53 -j TRACE
 ## kernel print
 * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_monitoring_and_updating_the_kernel/getting-started-with-kernel-logging_managing-monitoring-and-updating-the-kernel
 
-```
+
 $ sysctl kernel.printk
 kernel.printk = 7	4	1	7
 
