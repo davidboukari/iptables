@@ -60,7 +60,25 @@ iptables -t raw -A OUTPUT -p udp --sport 53 -j TRACE
 iptables -t raw -A OUTPUT -p udp --dport 53 -j TRACE
 
 
+## kernel print
+* https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_monitoring_and_updating_the_kernel/getting-started-with-kernel-logging_managing-monitoring-and-updating-the-kernel
 
+```
+$ sysctl kernel.printk
+kernel.printk = 7	4	1	7
+
+
+```
+
+
+## kernel restriction
+* https://www.stigviewer.com/stig/red_hat_enterprise_linux_8/2020-11-25/finding/V-230269
+
+```
+kernel.dmesg_restrict = 1
+sudo grep -r kernel.dmesg_restrict /etc/sysctl.conf /etc/sysctl.d/*.conf
+
+```
 ----------------
 
     Load the (IPv4) netfilter log kernel module:
