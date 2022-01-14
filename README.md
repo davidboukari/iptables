@@ -80,7 +80,7 @@ sudo grep -r kernel.dmesg_restrict /etc/sysctl.conf /etc/sysctl.d/*.conf
 
 ```
 ----------------
-
+```
     Load the (IPv4) netfilter log kernel module:
     # modprobe nf_log_ipv4
     Enable logging for the IPv4 (AF Family 2):
