@@ -64,11 +64,6 @@ The usage is quite simple, for example, to see a packet flow against port 22
     Then run tail -f /var/log/kern.log to see iptables flow log
     Once trace is finished, stop it by running sudo iptables-trace.sh disable 22
 
-
-
-
-
-
 * https://www.opensourcerers.org/2016/05/27/how-to-trace-iptables-in-rhel7-centos7/
 * https://qastack.fr/server/385937/how-to-enable-iptables-trace-target-on-debian-squeeze-6
 * https://sleeplessbeastie.eu/2020/11/13/how-to-trace-packets-as-they-pass-through-the-firewall/
@@ -92,8 +87,6 @@ iptables -L -v -t raw
 # To delete rule
 iptables -t raw -D PREROUTING 2
 iptables -t raw -D OUTPUT 1
-
-
 
 # Trace DNS call and back
 iptables -t raw -A PREROUTING -p udp --sport 53 -j TRACE
@@ -123,6 +116,20 @@ trace id 8c561cef ip nat POSTROUTING verdict continue mark 0x000000ff
 trace id 8c561cef ip nat POSTROUTING mark 0x000000ff
 
 $ nft monitor | grep "packet:"
+
+# Or see logs in journal 
+$ journalctl -k -f
+janv. 14 21:13:14 ns327296 kernel: TRACE: raw:PREROUTING:policy:4 IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=393 TOS=0x00 PREC=0x00 TTL=64 ID=32737 PROTO=UDP SPT=53 DPT=56453 LEN=373 
+janv. 14 21:13:14 ns327296 kernel: TRACE: filter:INPUT:policy:2 IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=393 TOS=0x00 PREC=0x00 TTL=64 ID=32737 PROTO=UDP SPT=53 DPT=56453 LEN=373 
+
+$ dmesg -k
+[242355.444636] TRACE: raw:PREROUTING:policy:4 IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=393 TOS=0x00 PREC=0x00 TTL=64 ID=32737 PROTO=UDP SPT=53 DPT=56453 LEN=373 
+[242355.444698] TRACE: filter:INPUT:policy:2 IN=lo OUT= MAC=00:00:00:00:00:00:00:00:00:00:00:00:08:00 SRC=127.0.0.1 DST=127.0.0.1 LEN=393 TOS=0x00 PREC=0x00 TTL=64 ID=32737 PROTO=UDP SPT=53 DPT=56453 LEN=373
+
+$ tail -f /var/log/messages
+
+
+
 ```
 
 
