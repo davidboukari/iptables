@@ -26,6 +26,49 @@ iptables -t filter -I INPUT -p tcp  --dport 5901  -j ACCEPT
 ____________________________________________________________________________
 ## Log to a file & log rotate
 
+
+```
+#!/bin/sh
+if [ $# != "2" ] || ! [ "${2}" -eq "${2}" ] 2> /dev/null
+then
+    if [ ${1} != "enable" ] && [ ${1} != "disable" ]
+    then
+        echo "Usage: ${0} [enable|disable] port"
+        exit 1
+    fi
+fi
+
+if [ ${1} = "enable" ]
+then
+    modprobe nf_log_ipv4
+    sysctl -w net.netfilter.nf_log.2=nf_log_ipv4
+    iptables -t raw -A PREROUTING -p tcp --dport ${2} -j TRACE
+    iptables -t raw -A OUTPUT -p tcp --dport ${2} -j TRACE
+    iptables -t raw -A PREROUTING -p udp --dport ${2} -j TRACE
+    iptables -t raw -A OUTPUT -p udp --dport ${2} -j TRACE
+    echo "iptables trace is enabled for port ${2}"
+    echo "run \"tail -f /var/log/kern.log\" to view trace"
+else
+    iptables -t raw -D OUTPUT -p tcp --dport ${2} -j TRACE
+    iptables -t raw -D PREROUTING -p tcp --dport ${2} -j TRACE
+    iptables -t raw -D OUTPUT -p udp --dport ${2} -j TRACE
+    iptables -t raw -D PREROUTING -p udp --dport ${2} -j TRACE
+    sysctl -w net.netfilter.nf_log.2=NONE
+    echo "iptables trace is disabled for port ${2}"
+fi
+```
+
+The usage is quite simple, for example, to see a packet flow against port 22
+
+    Run sudo iptables-trace.sh enable 22
+    Then run tail -f /var/log/kern.log to see iptables flow log
+    Once trace is finished, stop it by running sudo iptables-trace.sh disable 22
+
+
+
+
+
+
 * https://www.opensourcerers.org/2016/05/27/how-to-trace-iptables-in-rhel7-centos7/
 * https://qastack.fr/server/385937/how-to-enable-iptables-trace-target-on-debian-squeeze-6
 * https://sleeplessbeastie.eu/2020/11/13/how-to-trace-packets-as-they-pass-through-the-firewall/
