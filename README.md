@@ -58,12 +58,12 @@ iptables -t raw -A PREROUTING -p udp --dport 53 -j TRACE
 
 iptables -t raw -A OUTPUT -p udp --sport 53 -j TRACE
 iptables -t raw -A OUTPUT -p udp --dport 53 -j TRACE
-
+```
 
 ## kernel print
 * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_monitoring_and_updating_the_kernel/getting-started-with-kernel-logging_managing-monitoring-and-updating-the-kernel
 
-
+```
 $ sysctl kernel.printk
 kernel.printk = 7	4	1	7
 
