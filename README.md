@@ -121,6 +121,8 @@ trace id 802a6813 ip raw OUTPUT
 trace id 8c561cef ip mangle POSTROUTING mark 0x000000ff
 trace id 8c561cef ip nat POSTROUTING verdict continue mark 0x000000ff
 trace id 8c561cef ip nat POSTROUTING mark 0x000000ff
+
+$ nft monitor | grep "packet:"
 ```
 
 
