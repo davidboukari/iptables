@@ -103,6 +103,23 @@ iptables -t raw -A OUTPUT -p udp --sport 53 -j TRACE
 iptables -t raw -A OUTPUT -p udp --dport 53 -j TRACE
 ```
 
+## Monitor trace
+* https://wiki.nftables.org/wiki-nftables/index.php/Ruleset_debug/tracing
+* https://stackoverflow.com/questions/63791460/debian-buster-10-iptables-raw-trace-no-logs
+```
+nft monitor trace
+trace id 802a6813 ip raw OUTPUT packet: oif "eth0" ip saddr 192.168.0.88 ip daddr 208.67.222.222 ip dscp cs0 ip ecn not-ect ip ttl 64 ip id 32950 ip length 75 udp sport 54299 udp dport domain udp length 55 @th,64,96 4657996495637740913470472193
+trace id 802a6813 ip raw OUTPUT rule meta l4proto udp udp dport 53 counter packets 10694 bytes 669129 nftrace set 1 (verdict continue)
+trace id 802a6813 ip raw OUTPUT verdict continue
+trace id 802a6813 ip raw OUTPUT
+......
+trace id 8c561cef ip mangle POSTROUTING mark 0x000000ff
+trace id 8c561cef ip nat POSTROUTING verdict continue mark 0x000000ff
+trace id 8c561cef ip nat POSTROUTING mark 0x000000ff
+```
+
+
+
 ## kernel print
 * https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_monitoring_and_updating_the_kernel/getting-started-with-kernel-logging_managing-monitoring-and-updating-the-kernel
 
