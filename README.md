@@ -49,6 +49,18 @@ iptables -L -v -t raw
 # To delete rule
 iptables -t raw -D PREROUTING 2
 iptables -t raw -D OUTPUT 1
+
+
+
+# Trace DNS call and back
+iptables -t raw -A PREROUTING -p udp --sport 53 -j TRACE
+iptables -t raw -A PREROUTING -p udp --dport 53 -j TRACE
+
+iptables -t raw -A OUTPUT -p udp --sport 53 -j TRACE
+iptables -t raw -A OUTPUT -p udp --dport 53 -j TRACE
+
+
+
 ----------------
 
     Load the (IPv4) netfilter log kernel module:
