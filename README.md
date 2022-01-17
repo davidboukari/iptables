@@ -27,7 +27,7 @@ iptables -t filter -I INPUT -p tcp  --dport 5901  -j ACCEPT
 ## Redirect to local port
 ```
 # redirect 443 to 1443
-iptables -t nat -A PREROUTING -p tcp --dport 443 -j REDIRECT --to-port 1443
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 1443
 ```
 ____________________________________________________________________________
 ## Log to a file & log rotate
