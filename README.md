@@ -24,11 +24,43 @@ ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 iptables -t filter -I INPUT -p tcp  --dport 5901  -j ACCEPT
 ```
 
-## Redirect to local port
+## Redirect to local port  
+* REDIRECT the packet to the local host
 ```
 # redirect 443 to 1443
 iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 1443
 ```
+
+### Usage with docker block port sample
+```
+# Activate the TRACE
+modprobe nf_log_ipv4
+sysctl net.netfilter.nf_log.2=nf_log_ipv4
+systemctl restart rsyslog
+
+# Block port 20000 for local redirect packet
+iptables -t filter -I INPUT -p tcp --dport 20000 -j DROP
+
+# redirect eth0 443 to local 10993
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 443 -j REDIRECT --to-port 10993
+
+# Redirect to unused port to block port on PREROUTING
+iptables -t nat -I PREROUTING -p tcp -i eth0 --dport 10993 -j REDIRECT  --to-ports 20000
+iptables -t nat -I PREROUTING -p tcp -i eth0 --dport 13306 -j REDIRECT  --to-ports 20000
+
+# Log some packet
+iptables -t raw -I PREROUTING -p tcp --sport 13306 -j TRACE
+iptables -t raw -I PREROUTING -p tcp --dport 13306 -j TRACE
+iptables -t raw -I OUTPUT -p tcp --sport 13306 -j TRACE
+iptables -t raw -I OUTPUT -p tcp --dport 13306 -j TRACE
+
+iptables -t raw -I PREROUTING -p tcp --sport 10993 -j TRACE
+iptables -t raw -I PREROUTING -p tcp --dport 10993 -j TRACE
+iptables -t raw -I OUTPUT -p tcp --sport 10993 -j TRACE
+iptables -t raw -I OUTPUT -p tcp --dport 10993 -j TRACE
+
+```
+
 ____________________________________________________________________________
 ## Log to a file & log rotate
 
