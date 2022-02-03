@@ -13,6 +13,34 @@
 ## firewalld
 * https://github.com/davidboukari/firewalld
 
+
+## Default rules for ubuntu server
+```
+#!/bin/bash
+
+INTF=$(ip a |grep -B 2 $(hostname -I|awk '{print $1}')|head -n 1|awk '{print $2}'|tr -d ':')
+
+# Flush all
+iptables -t nat -F
+iptables -t raw -F
+iptables -t filter -F
+
+# Port 22 Accept for all interface or internet interf
+iptables -t filter -I INPUT  -p tcp  --dport 22 -j ACCEPT
+iptables -t filter -I OUTPUT -p tcp  --sport 22 -j ACCEPT
+
+# DNS request of the host
+iptables -t filter -A INPUT  -m conntrack --ctstate RELATED,ESTABLISHED     -p udp --sport 53 -j ACCEPT  
+iptables -t filter -A OUTPUT -m conntrack --ctstate NEW,RELATED,ESTABLISHED -p udp --dport 53 -j ACCEPT
+
+# Default Policies DROP all others packets
+iptables -P FORWARD DROP
+iptables -P INPUT  DROP
+iptables -P OUTPUT DROP
+
+```
+
+
 ## Configure DNS resolver
 
 ### DNS
