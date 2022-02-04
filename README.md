@@ -710,6 +710,8 @@ ipset del ALLOWEDMGMTPORTS 53
 ipset del ALLOWEDMGMTPORTS 80
 ipset del ALLOWEDMGMTPORTS 8080
 ipset list
+
+ipset destroy ALLOWEDMGMT
 ```
 
 ### ipset block ips
