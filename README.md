@@ -166,6 +166,32 @@ iptables -t raw -A OUTPUT -p udp --sport 53 -j TRACE
 iptables -t raw -A OUTPUT -p udp --dport 53 -j TRACE
 ```
 
+## To disable the TRACE
+```
+sysctl -a | grep nf_log
+net.netfilter.nf_log.0 = NONE
+net.netfilter.nf_log.1 = NONE
+net.netfilter.nf_log.10 = NONE
+net.netfilter.nf_log.11 = NONE
+net.netfilter.nf_log.12 = NONE
+net.netfilter.nf_log.2 = NONE
+net.netfilter.nf_log.3 = NONE
+net.netfilter.nf_log.4 = NONE
+net.netfilter.nf_log.5 = NONE
+net.netfilter.nf_log.6 = NONE
+net.netfilter.nf_log.7 = NONE
+net.netfilter.nf_log.8 = NONE
+net.netfilter.nf_log.9 = NONE
+net.netfilter.nf_log_all_netns = 0
+
+$ sysctl net.netfilter.nf_log.2=NONE
+net.netfilter.nf_log.2 = NONE
+
+$ systemctl restart syslog
+
+
+```
+
 ## show Trace logs & Monitor trace
 * https://wiki.nftables.org/wiki-nftables/index.php/Ruleset_debug/tracing
 * https://stackoverflow.com/questions/63791460/debian-buster-10-iptables-raw-trace-no-logs
