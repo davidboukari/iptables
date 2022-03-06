@@ -694,6 +694,15 @@ iptables -t filter -I OUTPUT -p tcp -m multiport --dports 80,443,8080 \
 
 ```
 
+# Limit
+```
+# Limit packet traffic on a TCP or UDP port:
+iptables -A INPUT -p $proto --destination-port $port --syn -m state --state NEW -m limit --limit $lim/s --limit-burst $lb -j ACCEPT
+
+# Limit established/related packet traffic:
+iptables -A INPUT -m state --state RELATED,ESTABLISHED -m limit --limit $lim/s --limit-burst $lb -j ACCEPT
+```
+
 ____________________________________________________________________________
 ## user / group traffic restriction
 ```
