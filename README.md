@@ -38,6 +38,7 @@ SSH_EXTERNAL_PORT=xxxx
 # Redirect to external QNAP WEBDAV receiveid from $QNAP_EXTERNAL_WEBDAV_PORT to external IP:5001
 /sbin/iptables -t nat -A PREROUTING -p tcp --dport $QNAP_EXTERNAL_WEBDAV_PORT  -j DNAT --to-destination ${QNAP_IP}:5001
 
+/sbin/iptables-save
 ```
 
 ## iptables default rules firewall
