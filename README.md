@@ -14,6 +14,10 @@ QNAP_EXTERNAL_WEBDAV_PORT=xxxx
 QNAP_IP=xxx
 
 SSH_EXTERNAL_PORT=xxxx
+SSH_INTERNAL_PORT=xxxx
+
+VPN_EXTERNAL_PORT=xxxx
+VPN_INTERNAL_PORT=xxxx
 
 # Clean for FORWARD
 /sbin/iptables -t filter -X
@@ -30,7 +34,10 @@ SSH_EXTERNAL_PORT=xxxx
 /sbin/iptables -t nat -A POSTROUTING -j MASQUERADE
 
 # Redirect to local ssh received from  external $SSH_EXTERNAL_PORT to local ssh port
-/sbin/iptables -A PREROUTING -t nat -i eth0 -p tcp --dport $SSH_EXTERNAL_PORT -j REDIRECT --to-port 22
+/sbin/iptables -A PREROUTING -t nat -i eth0 -p tcp --dport $SSH_EXTERNAL_PORT -j REDIRECT --to-port $SSH_INTERNAL_PORT
+
+# Redirect to local vpn received from  external $VPN_EXTERNAL_PORT to local $VPN_INTERNAL_PORT port
+/sbin/iptables -A PREROUTING -t nat -i eth0 -p udp --dport $VPN_EXTERNAL_PORT -j REDIRECT --to-port $VPN_INTERNAL_PORT
 
 # Redirect to external QNAP from external $QNAP_EXTERNAL_PORT to external IP:443
 /sbin/iptables -t nat -A PREROUTING -p tcp --dport $QNAP_EXTERNAL_PORT  -j DNAT --to-destination ${QNAP_IP}:443
