@@ -1,5 +1,45 @@
 # iptables
 
+
+## Default firewall
+```
+cat firewall.sh
+#!/bin/bash -x
+
+# Activate forwarding echo
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+QNAP_EXTERNAL_PORT=xxxx
+QNAP_EXTERNAL_WEBDAV_PORT=xxxx
+QNAP_IP=xxx
+
+SSH_EXTERNAL_PORT=xxxx
+
+# Clean for FORWARD
+/sbin/iptables -t filter -X
+/sbin/iptables -t filter -F
+
+# Clean for PREROUTING 
+/sbin/iptables -t nat -X
+/sbin/iptables -t nat -F
+
+# Accept forward to eth0
+/sbin/iptables -t filter -A FORWARD -o eth0 -j ACCEPT
+
+# MASQUERADE
+/sbin/iptables -t nat -A POSTROUTING -j MASQUERADE
+
+# Redirect to local ssh received from  external $SSH_EXTERNAL_PORT to local ssh port
+/sbin/iptables -A PREROUTING -t nat -i eth0 -p tcp --dport $SSH_EXTERNAL_PORT -j REDIRECT --to-port 22
+
+# Redirect to external QNAP from external $QNAP_EXTERNAL_PORT to external IP:443
+/sbin/iptables -t nat -A PREROUTING -p tcp --dport $QNAP_EXTERNAL_PORT  -j DNAT --to-destination ${QNAP_IP}:443
+
+# Redirect to external QNAP WEBDAV receiveid from $QNAP_EXTERNAL_WEBDAV_PORT to external IP:5001
+/sbin/iptables -t nat -A PREROUTING -p tcp --dport $QNAP_EXTERNAL_WEBDAV_PORT  -j DNAT --to-destination ${QNAP_IP}:5001
+
+```
+
 ## iptables default rules firewall
 * https://github.com/davidboukari/firewall
 
